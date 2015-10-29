@@ -1,7 +1,8 @@
 var express         =       require("express");
 var multer          =       require('multer');
 var app             =       express();
-var upload      =   multer({ dest: './uploads/'});
+var upload          =       multer({ dest: './uploads/'});
+var fs              =       require('fs');
 
 app.use(multer({ dest: './uploads/',
     rename: function (fieldname, filename) {
@@ -16,16 +17,26 @@ app.use(multer({ dest: './uploads/',
 }));
 
 app.get('/',function(req,res){
-    console.log("\n\n\n"+req);
-    
-      res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/index.html");
 });
 
-app.get('/getfile',function(req,res){
-      res.sendFile(__dirname + "/BeatYoursFriends.apk");
+// app.get('/getfile',function(req,res){
+//       res.sendFile(__dirname + "/BeatYoursFriends.apk");
+// });
+
+app.get('api/getAllFilesName',function(req,res){
+    fs.readdir("./uploads/",function(err, items) {
+        console.log("\n\nAll items:")
+        console.log(items);
+
+        for (var i=0; i<items.length; i++) {
+            console.log(items[i]);
+        }
+    });
+    res.status(200).end()
 });
 
-app.post('/api/photo',function(req,res){
+app.post('/api/upload',function(req,res){
     console.log("\n\n\n"+req);
     console.log("\n"+req.files);
     upload(req,res,function(err) {
@@ -36,14 +47,16 @@ app.post('/api/photo',function(req,res){
     });
 });
 
-app.post('/api/iLoveNodar',function(req,res){
+//add error function**
+app.get('/api/download/:fileName', function(req, res){
+  console.log("starting download:"+ req.params.fileName);
+  var file = './uploads/'+req.params.fileName;
+  console.log("finished");
+  res.download(file); // Set disposition and send it.
+});
 
-    upload(req,res,function(err) {
-        if(err) {
-            return res.end("Error uploading file.");
-        }
-        res.end("And She loves oren");
-    });
+app.post('/api/iLoveNodar',function(req,res){
+    res.status(200).end()
 });
 
 app.post('/api/showfiles', function(req, res) {
@@ -52,6 +65,10 @@ app.post('/api/showfiles', function(req, res) {
     res.status(204).end()
 });
 
-app.listen(process.env.PORT,function(){
+// app.listen(process.env.PORT,function(){
+//     console.log("Working on port "+process.env.PORT);
+// });
+
+app.listen(3000,function(){
     console.log("Working on port "+process.env.PORT);
 });
