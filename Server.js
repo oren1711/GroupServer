@@ -24,7 +24,7 @@ app.get('/',function(req,res){
 //       res.sendFile(__dirname + "/BeatYoursFriends.apk");
 // });
 
-app.get('api/getAllFilesName',function(req,res){
+app.get('/api/getAllFilesName',function(req,res){
     fs.readdir("./uploads/",function(err, items) {
         console.log("\n\nAll items:")
         console.log(items);
