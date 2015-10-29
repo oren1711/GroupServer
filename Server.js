@@ -65,10 +65,10 @@ app.post('/api/showfiles', function(req, res) {
     res.status(204).end()
 });
 
-// app.listen(process.env.PORT,function(){
-//     console.log("Working on port "+process.env.PORT);
-// });
-
-app.listen(3000,function(){
+app.listen(process.env.PORT,function(){
     console.log("Working on port "+process.env.PORT);
 });
+
+// app.listen(3000,function(){
+//     console.log("Working on port "+3000);
+// });
